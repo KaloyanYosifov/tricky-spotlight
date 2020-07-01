@@ -30,7 +30,7 @@ func TestItHasActiveKeyWhenPressed(t *testing.T) {
 		t.Fatal("Only one key should be pressed!")
 	}
 
-	if keyEventHandler.currentActiveKeys[0] != KEY_1 {
+	if !keyEventHandler.IsKeyActive(KEY_1) {
 		t.Fatal("Current active key is not equal to the key we pressed!")
 	}
 }
@@ -42,6 +42,10 @@ func TestItCanReleaseAKey(t *testing.T) {
 
 	if len(keyEventHandler.currentActiveKeys) > 0 {
 		t.Fatal("We have released a key, there shouldnt be anything in current active keys!")
+	}
+
+	if keyEventHandler.IsKeyActive(KEY_1) {
+		t.Fatal("The key is till pressed!")
 	}
 }
 

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/therecipe/qt/core"
 	"os"
 
@@ -25,17 +24,16 @@ func main() {
 	window.SetCentralWidget(widget)
 	window.SetAttribute(core.Qt__WA_AlwaysStackOnTop, true)
 
-	go keylogger.WaitForKeyEvents(func(key string) {
-		if key == "SPACE" {
+	keyEventHandler := keylogger.NewKeyEventHandler(func(eventHandler *keylogger.KeyEventHandler) {
+		if eventHandler.IsKeyActive(keylogger.KEY_SPACE) {
 			window.Show()
-		}
-
-		if key == "G" {
+		} else if eventHandler.IsKeyActive(keylogger.KEY_G) {
 			window.Hide()
 		}
-	}, func(key string) {
-		fmt.Println("a")
+	}, func(eventHandler *keylogger.KeyEventHandler) {
+
 	})
+	go keylogger.WaitForKeyEvents(keyEventHandler)
 
 	// start the main Qt event loop
 	// and block until app.Exit() is called

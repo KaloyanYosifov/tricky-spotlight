@@ -107,6 +107,16 @@ func (kEH *KeyEventHandler) keyReleased(key GlobalKey) {
 	}
 }
 
+func (kEH *KeyEventHandler) IsKeyActive(key GlobalKey) bool {
+	for _, currentKey := range kEH.currentActiveKeys {
+		if currentKey == key {
+			return true
+		}
+	}
+
+	return false
+}
+
 func NewKeyEventHandler(onKeyPress func(eventHandler *KeyEventHandler), onKeyRelease func(eventHandler *KeyEventHandler)) *KeyEventHandler {
 	return &KeyEventHandler{
 		onKeyPress:        onKeyPress,

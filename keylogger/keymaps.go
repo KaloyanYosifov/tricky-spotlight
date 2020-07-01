@@ -1,25 +1,28 @@
 package keylogger
 
-type Keys uint16
+type GlobalKey uint16
 
 type KeyEventHandler struct {
 	onKeyPress        func(eventHandler *KeyEventHandler)
 	onKeyRelease      func(eventHandler *KeyEventHandler)
-	currentActiveKeys []Keys
+	currentActiveKeys []GlobalKey
 }
 
 const (
-	KEY_1 Keys = 48
-	KEY_2 Keys = 48
+	KEY_1 GlobalKey = 48
+	KEY_2           = 49
 )
 
-func (kEH *KeyEventHandler) keyPressed(key Keys) {
+func (kEH *KeyEventHandler) keyPressed(key GlobalKey) {
 	kEH.currentActiveKeys = append(kEH.currentActiveKeys, key)
-	kEH.onKeyPress(kEH)
+
+	if kEH.onKeyPress != nil {
+		kEH.onKeyPress(kEH)
+	}
 }
 
-func (kEH *KeyEventHandler) keyReleased(key Keys) {
-	activeKeys := make([]Keys, 0, len(kEH.currentActiveKeys))
+func (kEH *KeyEventHandler) keyReleased(key GlobalKey) {
+	activeKeys := make([]GlobalKey, 0, len(kEH.currentActiveKeys))
 
 	for _, currentKey := range kEH.currentActiveKeys {
 		if currentKey == key {
@@ -30,5 +33,16 @@ func (kEH *KeyEventHandler) keyReleased(key Keys) {
 	}
 
 	kEH.currentActiveKeys = activeKeys
-	kEH.onKeyRelease(kEH)
+
+	if kEH.onKeyRelease != nil {
+		kEH.onKeyRelease(kEH)
+	}
+}
+
+func NewKeyEventHandler(onKeyPress func(eventHandler *KeyEventHandler), onKeyRelease func(eventHandler *KeyEventHandler)) *KeyEventHandler {
+	return &KeyEventHandler{
+		onKeyPress:        onKeyPress,
+		onKeyRelease:      onKeyRelease,
+		currentActiveKeys: []GlobalKey{},
+	}
 }

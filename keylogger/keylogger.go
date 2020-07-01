@@ -25,12 +25,12 @@ func WaitForKeyEvents(eventHandler *KeyEventHandler) {
 	for e := range events {
 		if e.Type == keylogger.EvKey {
 			if e.KeyPress() {
-				eventHandler.keyPressed(Keys(e.Code))
+				eventHandler.keyPressed(GlobalKey(e.Code))
 			}
 
 			// if the state of key is released
 			if e.KeyRelease() {
-				eventHandler.keyReleased(Keys(e.Code))
+				eventHandler.keyReleased(GlobalKey(e.Code))
 			}
 		}
 	}

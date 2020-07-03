@@ -10,23 +10,28 @@ type Window struct {
 	activeWindow *widgets.QMainWindow
 }
 
-func initMainWindow() *Window {
+func initMainWindow(app *widgets.QApplication) *Window {
+	screenData := app.Desktop().ScreenGeometry(0)
 	window := widgets.NewQMainWindow(nil, 0)
-	window.SetMinimumSize2(1200, 900)
+	window.SetMinimumSize2(screenData.Width()/2, 200)
 	window.SetWindowTitle("Tricky Spotlight")
 
-	// create a regular widget
-	// give it a QVBoxLayout
-	// and make it the central widget of the window
+	// Center window
+	x := (screenData.Width() - window.Width()) / 2
+	y := (screenData.Height() - window.Height()) / 2
+	window.Move2(x, y)
+
 	widget := widgets.NewQWidget(nil, 0)
 	widget.SetLayout(widgets.NewQGridLayout2())
 	window.SetCentralWidget(widget)
-	window.SetAttribute(core.Qt__WA_AlwaysStackOnTop, true)
-	window.SetWindowFlag(core.Qt__WindowStaysOnTopHint, true)
 
-	return &Window{
+	mainWindow := Window{
 		activeWindow: window,
 	}
+
+	mainWindow.initAttributes()
+
+	return &mainWindow
 }
 
 func (window *Window) initKeyEventHandling() {
@@ -42,4 +47,11 @@ func (window *Window) initKeyEventHandling() {
 
 	})
 	go keylogger.WaitForKeyEvents(keyEventHandler)
+}
+
+func (window *Window) initAttributes() {
+	window.activeWindow.SetAttribute(core.Qt__WA_AlwaysStackOnTop, true)
+	window.activeWindow.SetWindowFlag(core.Qt__WindowStaysOnTopHint, true)
+	window.activeWindow.SetWindowFlag(core.Qt__Dialog|core.Qt__MSWindowsFixedSizeDialogHint, true)
+	window.activeWindow.SetWindowFlag(core.Qt__FramelessWindowHint, true)
 }

@@ -58,3 +58,23 @@ func TestItReleasesOnlyKeyThatIsActive(t *testing.T) {
 		t.Fatal("The key was released when it shouldn't have!")
 	}
 }
+
+func TestItCanReturnTrueIfKeyCombinationExists(t *testing.T) {
+	keyEventHandler := NewKeyEventHandler(nil, nil)
+	keyEventHandler.keyPressed(KEY_LEFT_SHIFT)
+	keyEventHandler.keyPressed(KEY_a)
+
+	if !keyEventHandler.IsKeyCombinationActive([]GlobalKey{KEY_LEFT_SHIFT, KEY_a}) {
+		t.Fatal("The key combination is not active!")
+	}
+}
+
+func TestItCanReturnTrueIfKeyCombinationExistsAndTheOrderDoesntMatter(t *testing.T) {
+	keyEventHandler := NewKeyEventHandler(nil, nil)
+	keyEventHandler.keyPressed(KEY_LEFT_SHIFT)
+	keyEventHandler.keyPressed(KEY_a)
+
+	if !keyEventHandler.IsKeyCombinationActive([]GlobalKey{KEY_a, KEY_LEFT_SHIFT}) {
+		t.Fatal("The key combination is not active!")
+	}
+}

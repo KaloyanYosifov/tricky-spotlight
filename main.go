@@ -23,12 +23,15 @@ func main() {
 	widget.SetLayout(widgets.NewQGridLayout2())
 	window.SetCentralWidget(widget)
 	window.SetAttribute(core.Qt__WA_AlwaysStackOnTop, true)
+	window.SetWindowFlag(core.Qt__WindowStaysOnTopHint, true)
 
 	keyEventHandler := keylogger.NewKeyEventHandler(func(eventHandler *keylogger.KeyEventHandler) {
-		if eventHandler.IsKeyActive(keylogger.KEY_SPACE) {
-			window.Show()
-		} else if eventHandler.IsKeyActive(keylogger.KEY_G) {
-			window.Hide()
+		if eventHandler.IsKeyCombinationActive([]keylogger.GlobalKey{keylogger.KEY_SPACE, keylogger.KEY_CTRL}) {
+			if window.IsVisible() {
+				window.Hide()
+			} else {
+				window.Show()
+			}
 		}
 	}, func(eventHandler *keylogger.KeyEventHandler) {
 

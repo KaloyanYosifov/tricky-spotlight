@@ -122,10 +122,39 @@ func (kEH *KeyEventHandler) IsKeyActive(key GlobalKey) bool {
 	return false
 }
 
+func (kEH *KeyEventHandler) IsKeyCombinationActive(keys []GlobalKey) bool {
+	if len(keys) == 0 {
+		return false
+	}
+
+	foundKeys := 0
+	for _, currentKey := range kEH.currentActiveKeys {
+		if isKeyInSlice(keys, currentKey) {
+			foundKeys++
+		}
+
+		if foundKeys == len(keys) {
+			return true
+		}
+	}
+
+	return false
+}
+
 func NewKeyEventHandler(onKeyPress func(eventHandler *KeyEventHandler), onKeyRelease func(eventHandler *KeyEventHandler)) *KeyEventHandler {
 	return &KeyEventHandler{
 		onKeyPress:        onKeyPress,
 		onKeyRelease:      onKeyRelease,
 		currentActiveKeys: []GlobalKey{},
 	}
+}
+
+func isKeyInSlice(keys []GlobalKey, key GlobalKey) bool {
+	for _, currentKey := range keys {
+		if currentKey == key {
+			return true
+		}
+	}
+
+	return false
 }

@@ -10,75 +10,80 @@ type KeyEventHandler struct {
 
 const (
 	// Trivial
-	KEY_SPACE GlobalKey = 32
+	KEY_SPACE       GlobalKey = 57
+	KEY_CTRL                  = 56
+	KEY_META                  = 29
+	KEY_ALT                   = 125
+	KEY_LEFT_SHIFT            = 42
+	KEY_RIGHT_SHIFT           = 54
 
 	// Numbers
-	KEY_0 = 48
-	KEY_1 = 49
-	KEY_2 = 50
-	KEY_3 = 51
-	KEY_4 = 52
-	KEY_5 = 53
-	KEY_6 = 54
-	KEY_7 = 55
-	KEY_8 = 56
-	KEY_9 = 57
-
-	// Alphabet Uppercase
-	KEY_A = 65
-	KEY_B = 66
-	KEY_C = 67
-	KEY_D = 68
-	KEY_E = 69
-	KEY_F = 70
-	KEY_G = 71
-	KEY_H = 72
-	KEY_I = 73
-	KEY_J = 74
-	KEY_K = 75
-	KEY_L = 76
-	KEY_M = 77
-	KEY_N = 78
-	KEY_O = 79
-	KEY_P = 80
-	KEY_Q = 81
-	KEY_R = 82
-	KEY_S = 83
-	KEY_T = 84
-	KEY_U = 85
-	KEY_V = 86
-	KEY_W = 87
-	KEY_X = 88
-	KEY_Y = 89
-	KEY_Z = 90
+	KEY_0 = 11
+	KEY_1 = 2
+	KEY_2 = 3
+	KEY_3 = 4
+	KEY_4 = 5
+	KEY_5 = 6
+	KEY_6 = 7
+	KEY_7 = 8
+	KEY_8 = 9
+	KEY_9 = 10
 
 	// Alphabet Lowercase
-	KEY_a = 97
-	KEY_b = 98
-	KEY_c = 99
-	KEY_d = 100
-	KEY_e = 101
-	KEY_f = 102
-	KEY_g = 103
-	KEY_h = 104
-	KEY_i = 105
-	KEY_j = 106
-	KEY_k = 107
-	KEY_l = 108
-	KEY_m = 109
-	KEY_n = 110
-	KEY_o = 111
-	KEY_p = 112
-	KEY_q = 113
-	KEY_r = 114
-	KEY_s = 115
-	KEY_t = 116
-	KEY_u = 117
-	KEY_v = 118
-	KEY_w = 119
-	KEY_x = 120
-	KEY_y = 121
-	KEY_z = 122
+	KEY_a = 30
+	KEY_b = 48
+	KEY_c = 46
+	KEY_d = 32
+	KEY_e = 18
+	KEY_f = 33
+	KEY_g = 34
+	KEY_h = 35
+	KEY_i = 23
+	KEY_j = 36
+	KEY_k = 37
+	KEY_l = 38
+	KEY_m = 50
+	KEY_n = 49
+	KEY_o = 24
+	KEY_p = 25
+	KEY_q = 16
+	KEY_r = 19
+	KEY_s = 31
+	KEY_t = 20
+	KEY_u = 22
+	KEY_v = 47
+	KEY_w = 17
+	KEY_x = 45
+	KEY_y = 21
+	KEY_z = 44
+
+	// Alphabet Uppercase
+	KEY_A = KEY_a << KEY_LEFT_SHIFT
+	KEY_B = KEY_b << KEY_LEFT_SHIFT
+	KEY_C = KEY_c << KEY_LEFT_SHIFT
+	KEY_D = KEY_d << KEY_LEFT_SHIFT
+	KEY_E = KEY_e << KEY_LEFT_SHIFT
+	KEY_F = KEY_f << KEY_LEFT_SHIFT
+	KEY_G = KEY_g << KEY_LEFT_SHIFT
+	KEY_H = KEY_h << KEY_LEFT_SHIFT
+	KEY_I = KEY_i << KEY_LEFT_SHIFT
+	KEY_J = KEY_j << KEY_LEFT_SHIFT
+	KEY_K = KEY_k << KEY_LEFT_SHIFT
+	KEY_L = KEY_l << KEY_LEFT_SHIFT
+	KEY_M = KEY_m << KEY_LEFT_SHIFT
+	KEY_N = KEY_n << KEY_LEFT_SHIFT
+	KEY_O = KEY_o << KEY_LEFT_SHIFT
+	KEY_P = KEY_p << KEY_LEFT_SHIFT
+	KEY_Q = KEY_q << KEY_LEFT_SHIFT
+	KEY_R = KEY_r << KEY_LEFT_SHIFT
+	KEY_S = KEY_s << KEY_LEFT_SHIFT
+	KEY_T = KEY_t << KEY_LEFT_SHIFT
+	KEY_U = KEY_u << KEY_LEFT_SHIFT
+	KEY_V = KEY_v << KEY_LEFT_SHIFT
+	KEY_W = KEY_w << KEY_LEFT_SHIFT
+	KEY_X = KEY_x << KEY_LEFT_SHIFT
+	KEY_Y = KEY_y << KEY_LEFT_SHIFT
+	KEY_Z = KEY_z << KEY_LEFT_SHIFT
 )
 
 func (kEH *KeyEventHandler) keyPressed(key GlobalKey) {

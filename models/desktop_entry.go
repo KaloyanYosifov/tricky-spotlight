@@ -6,6 +6,7 @@ import (
 
 type DesktopEntry struct {
 	gorm.Model
-	Icon string
-	Path string
+	Icon           string
+	EntryPath      string
+	ExecutablePath string
 }

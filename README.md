@@ -1,0 +1,1 @@
+To run the project with debug run `go run -ldflags "-X main.env=debug" .`

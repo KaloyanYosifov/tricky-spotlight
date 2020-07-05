@@ -1,7 +1,11 @@
 package models
 
 import (
+	"bytes"
+	"github.com/KaloyanYosifov/tricky-spotlight/logger"
 	"github.com/jinzhu/gorm"
+	"os/exec"
+	"strings"
 )
 
 type DesktopEntry struct {
@@ -17,4 +21,49 @@ func SearchForDesktopEntry(name string, db *gorm.DB) []DesktopEntry {
 	db.Where("name like ?", "%"+name+"%").Find(&desktopEntries)
 
 	return desktopEntries
+}
+
+func (de *DesktopEntry) Execute() {
+	userToRunCommandAs := findOutAsWhoToExecuteEntryAs()
+	cmd := exec.Command("runuser", "-l", userToRunCommandAs, "-c", "export DISPLAY=:0 && "+de.ExecutablePath+" &")
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	err := cmd.Run()
+
+	if err != nil {
+		panic("Something went wrong when trying to run the program")
+	}
+
+	logger.Debug("Executed command " + de.ExecutablePath)
+}
+
+func findOutAsWhoToExecuteEntryAs() string {
+	wCmd := exec.Command("w", "-h")
+	var output bytes.Buffer
+	wCmd.Stdout = &output
+
+	if err := wCmd.Run(); err != nil {
+		logger.Debug("desktop_entry: cannot run \"w\" command!")
+		return "root"
+	}
+
+	awkCmd := exec.Command("awk", "{print $1}")
+	awkCmd.Stdin = strings.NewReader(output.String())
+	var output2 bytes.Buffer
+	awkCmd.Stdout = &output2
+
+	if err := awkCmd.Run(); err != nil {
+		logger.Debug("desktop_entry: cannot run \"awk\" command!")
+		return "root"
+	}
+
+	users := strings.Split(output2.String(), "\n")
+
+	for _, user := range users {
+		if user != "root" {
+			return user
+		}
+	}
+
+	return "root"
 }

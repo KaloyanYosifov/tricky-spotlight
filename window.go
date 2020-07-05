@@ -7,7 +7,7 @@ import (
 )
 
 type Window struct {
-	activeWindow *widgets.QMainWindow
+	*widgets.QMainWindow
 }
 
 func initMainWindow(app *widgets.QApplication) *Window {
@@ -25,9 +25,7 @@ func initMainWindow(app *widgets.QApplication) *Window {
 	widget.SetLayout(widgets.NewQGridLayout2())
 	window.SetCentralWidget(widget)
 
-	mainWindow := Window{
-		activeWindow: window,
-	}
+	mainWindow := Window{window}
 	mainWindow.initAttributes()
 
 	return &mainWindow
@@ -36,10 +34,10 @@ func initMainWindow(app *widgets.QApplication) *Window {
 func (window *Window) initKeyEventHandling() {
 	keyEventHandler := keylogger.NewKeyEventHandler(func(eventHandler *keylogger.KeyEventHandler) {
 		if eventHandler.IsKeyCombinationActive([]keylogger.GlobalKey{keylogger.KEY_SPACE, keylogger.KEY_CTRL}) {
-			if window.activeWindow.IsVisible() {
-				window.activeWindow.Hide()
+			if window.IsVisible() {
+				window.Hide()
 			} else {
-				window.activeWindow.Show()
+				window.Show()
 			}
 		}
 	}, func(eventHandler *keylogger.KeyEventHandler) {
@@ -49,8 +47,8 @@ func (window *Window) initKeyEventHandling() {
 }
 
 func (window *Window) initAttributes() {
-	window.activeWindow.SetAttribute(core.Qt__WA_AlwaysStackOnTop, true)
-	window.activeWindow.SetWindowFlag(core.Qt__WindowStaysOnTopHint, true)
-	window.activeWindow.SetWindowFlag(core.Qt__Dialog|core.Qt__MSWindowsFixedSizeDialogHint, true)
-	window.activeWindow.SetWindowFlag(core.Qt__FramelessWindowHint, true)
+	window.SetAttribute(core.Qt__WA_AlwaysStackOnTop, true)
+	window.SetWindowFlag(core.Qt__WindowStaysOnTopHint, true)
+	window.SetWindowFlag(core.Qt__Dialog|core.Qt__MSWindowsFixedSizeDialogHint, true)
+	window.SetWindowFlag(core.Qt__FramelessWindowHint, true)
 }

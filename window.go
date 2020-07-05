@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/KaloyanYosifov/tricky-spotlight/keylogger"
+	localWidgets "github.com/KaloyanYosifov/tricky-spotlight/widgets"
 	"github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/widgets"
 )
@@ -12,8 +13,8 @@ type Window struct {
 
 func initMainWindow(app *widgets.QApplication) *Window {
 	screenData := app.Desktop().ScreenGeometry(0)
-	window := widgets.NewQMainWindow(nil, 0)
-	window.SetMinimumSize2(screenData.Width()/2, 200)
+	window := Window{widgets.NewQMainWindow(nil, 0)}
+	window.SetMinimumSize2(screenData.Width()/2, 70)
 	window.SetWindowTitle("Tricky Spotlight")
 
 	// Center window
@@ -21,14 +22,10 @@ func initMainWindow(app *widgets.QApplication) *Window {
 	y := (screenData.Height() - window.Height()) / 2
 	window.Move2(x, y)
 
-	widget := widgets.NewQWidget(nil, 0)
-	widget.SetLayout(widgets.NewQGridLayout2())
-	window.SetCentralWidget(widget)
+	window.initAttributes()
+	window.SetCentralWidget(localWidgets.InitMainWidgets())
 
-	mainWindow := Window{window}
-	mainWindow.initAttributes()
-
-	return &mainWindow
+	return &window
 }
 
 func (window *Window) initKeyEventHandling() {

@@ -28,7 +28,6 @@ func initMainWindow(app *widgets.QApplication) *Window {
 	mainWindow := Window{
 		activeWindow: window,
 	}
-
 	mainWindow.initAttributes()
 
 	return &mainWindow

@@ -45,14 +45,16 @@ func indexDesktopEntries(db *gorm.DB) {
 		params := retrieveParamsFromEntries(strings.Split(string(data), "\n"))
 		executablePath, execOk := params["Exec"]
 		iconPath, iconOk := params["Icon"]
+		name, nameOk := params["Name"]
 
-		if !execOk || !iconOk {
-			logger.Debug("indexer: cannot retrieve either icon or executable paths")
+		if !execOk || !iconOk || !nameOk {
+			logger.Debug("indexer: cannot retrieve either icon, executable paths or name")
 			continue
 		}
 
 		db.Create(&models.DesktopEntry{
 			Icon:           iconPath,
+			Name:           name,
 			EntryPath:      desktopEntryPath,
 			ExecutablePath: executablePath,
 		})
@@ -64,6 +66,12 @@ func retrieveParamsFromEntries(data []string) map[string]string {
 	params := map[string]string{}
 
 	for _, line := range data {
+		// if we have a space somewhere
+		// then we are entering another desktop entry so stop
+		if line == "" || line == " " {
+			break
+		}
+
 		keyValuePairs := strings.Split(line, "=")
 
 		// if the keyValuePairs are less than 1

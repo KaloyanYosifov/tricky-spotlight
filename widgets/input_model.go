@@ -4,6 +4,9 @@ type InputModel struct {
 	text string
 }
 
+func (im *InputModel) init() {
+}
+
 func (im *InputModel) SetText(text string) *InputModel {
 	im.text = text
 

@@ -5,6 +5,13 @@ type InputModel struct {
 	text string
 }
 
+func NewInputModel() *InputModel {
+	return &InputModel{
+		&BaseModel{},
+		"",
+	}
+}
+
 func (im *InputModel) SetText(text string) *InputModel {
 	im.text = text
 
@@ -13,8 +20,4 @@ func (im *InputModel) SetText(text string) *InputModel {
 
 func (im *InputModel) GetText() string {
 	return im.text
-}
-
-func (im *InputModel) Update() {
-	im.BaseModel.Update()
 }

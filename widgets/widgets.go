@@ -27,6 +27,10 @@ func InitAppController() *AppController {
 }
 
 func GetAppController() *AppController {
+	if appController == nil {
+		return InitAppController()
+	}
+
 	return appController
 }
 
@@ -46,16 +50,12 @@ func (ac *AppController) AddController2(controller WidgetController, stretch int
 
 func (ac *AppController) Render() *AppController {
 	for _, controller := range ac.controllers {
-		if !controller.getModel().isDueForAnUpdate() {
-			continue
-		}
-
 		controller.render()
 	}
 
 	return ac
 }
 
-func (ac *AppController) getCentralWidget() widgets.QWidget_ITF {
+func (ac *AppController) GetCentralWidget() widgets.QWidget_ITF {
 	return ac.widget
 }

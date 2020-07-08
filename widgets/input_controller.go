@@ -18,7 +18,12 @@ func NewInputController2() *InputController {
 }
 
 func (ic *InputController) render() {
+	if !ic.model.isDueForAnUpdate() {
+		return
+	}
+
 	ic.input.SetText(ic.model.text)
+	ic.model.Updated()
 }
 
 func (ic *InputController) getModel() WidgetModel {

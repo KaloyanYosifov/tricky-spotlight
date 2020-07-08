@@ -23,7 +23,16 @@ func initMainWindow(app *widgets.QApplication) *Window {
 	window.Move2(x, y)
 
 	window.initAttributes()
-	window.SetCentralWidget(localWidgets.InitMainWidgets())
+
+	localWidgets.InitAppController()
+	window.SetCentralWidget(localWidgets.GetAppController().GetCentralWidget())
+
+	// launch a goroutine to handle the controller renders
+	go func(controller *localWidgets.AppController) {
+		for app != nil && !app.ClosingDown() {
+			controller.Render()
+		}
+	}(localWidgets.GetAppController())
 
 	return &window
 }

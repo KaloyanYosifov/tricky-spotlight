@@ -2,22 +2,22 @@ package widgets
 
 import "github.com/therecipe/qt/widgets"
 
-type InputController struct {
-	model *InputModel
-	input *InputView
+type inputController struct {
+	model *inputModel
+	input *inputView
 }
 
-func NewInputController(model *InputModel, input *InputView) *InputController {
-	inputController := &InputController{model, input}
+func NewInputController(model *inputModel, input *inputView) *inputController {
+	inputController := &inputController{model, input}
 
 	return inputController
 }
 
-func NewInputController2() *InputController {
-	return NewInputController(&InputModel{}, NewInputView())
+func NewInputController2(modelId string) *inputController {
+	return NewInputController(NewInputModel(modelId), NewInputView())
 }
 
-func (ic *InputController) render() {
+func (ic *inputController) render() {
 	if !ic.model.isDueForAnUpdate() {
 		return
 	}
@@ -26,10 +26,10 @@ func (ic *InputController) render() {
 	ic.model.Updated()
 }
 
-func (ic *InputController) getModel() WidgetModel {
+func (ic *inputController) getModel() WidgetModel {
 	return ic.model
 }
 
-func (ic *InputController) getView() widgets.QWidget_ITF {
+func (ic *inputController) getView() widgets.QWidget_ITF {
 	return ic.input
 }

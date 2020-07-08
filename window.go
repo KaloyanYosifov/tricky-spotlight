@@ -5,6 +5,8 @@ import (
 	localWidgets "github.com/KaloyanYosifov/tricky-spotlight/widgets"
 	"github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/widgets"
+	"math/rand"
+	"strconv"
 )
 
 type Window struct {
@@ -34,11 +36,30 @@ func initMainWindow(app *widgets.QApplication) *Window {
 		}
 	}(localWidgets.GetAppController())
 
+	initWidgets()
+
 	return &window
+}
+
+func initWidgets() {
+	localWidgets.GetAppController().AddController(localWidgets.NewInputController2("input-1"))
+	localWidgets.GetAppController().AddController(localWidgets.NewInputController2("input-2"))
 }
 
 func (window *Window) initKeyEventHandling() {
 	keyEventHandler := keylogger.NewKeyEventHandler(func(eventHandler *keylogger.KeyEventHandler) {
+		if eventHandler.IsKeyActive(keylogger.KEY_a) {
+			m := localWidgets.GetModelManager().GetModel("input-1")
+			m.SetText("testingggg" + strconv.Itoa(rand.Int()))
+			m.Update()
+		}
+
+		if eventHandler.IsKeyActive(keylogger.KEY_b) {
+			m := localWidgets.GetModelManager().GetModel("input-2")
+			m.SetText("test" + strconv.Itoa(rand.Int()))
+			m.Update()
+		}
+
 		if eventHandler.IsKeyCombinationActive([]keylogger.GlobalKey{keylogger.KEY_SPACE, keylogger.KEY_CTRL}) {
 			if window.IsVisible() {
 				window.Hide()
@@ -57,4 +78,6 @@ func (window *Window) initAttributes() {
 	window.SetWindowFlag(core.Qt__WindowStaysOnTopHint, true)
 	window.SetWindowFlag(core.Qt__Dialog|core.Qt__MSWindowsFixedSizeDialogHint, true)
 	window.SetWindowFlag(core.Qt__FramelessWindowHint, true)
+
+	window.SetStyleSheet("background-color: #1a2138")
 }

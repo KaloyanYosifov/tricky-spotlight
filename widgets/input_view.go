@@ -2,12 +2,12 @@ package widgets
 
 import "github.com/therecipe/qt/widgets"
 
-type InputView struct {
+type inputView struct {
 	*widgets.QLineEdit
 }
 
-func NewInputView() *InputView {
-	input := &InputView{widgets.NewQLineEdit(nil)}
+func NewInputView() *inputView {
+	input := &inputView{widgets.NewQLineEdit(nil)}
 	input.SetPlaceholderText("Look for something nice")
 	input.SetFixedHeight(50)
 	input.SetStyleSheet("background-color: #1a2138; " +

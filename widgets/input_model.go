@@ -1,10 +1,8 @@
 package widgets
 
 type InputModel struct {
+	*BaseModel
 	text string
-}
-
-func (im *InputModel) init() {
 }
 
 func (im *InputModel) SetText(text string) *InputModel {
@@ -15,4 +13,8 @@ func (im *InputModel) SetText(text string) *InputModel {
 
 func (im *InputModel) GetText() string {
 	return im.text
+}
+
+func (im *InputModel) Update() {
+	im.BaseModel.Update()
 }

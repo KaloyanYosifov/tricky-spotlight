@@ -21,7 +21,7 @@ func (ic *InputController) render() {
 	ic.input.SetText(ic.model.text)
 }
 
-func (ic *InputController) getModel() Model {
+func (ic *InputController) getModel() WidgetModel {
 	return ic.model
 }
 

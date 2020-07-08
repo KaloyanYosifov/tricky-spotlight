@@ -5,43 +5,57 @@ import (
 	"github.com/therecipe/qt/widgets"
 )
 
-type Layout struct {
-	*widgets.QVBoxLayout
+type AppController struct {
+	widget      *widgets.QWidget
+	layout      *widgets.QVBoxLayout
+	controllers []WidgetController
 }
 
-type Widget struct {
-	*widgets.QWidget
-}
+var appController *AppController
 
-func (w *Widget) AddController(controller Controller) *Widget {
-	w.Layout().AddWidget(controller.getView())
+func InitAppController() *AppController {
+	if appController != nil {
+		return GetAppController()
+	}
 
-	return w
-}
-
-func (l *Layout) AddController(controller Controller, stretch int, alignement core.Qt__AlignmentFlag) *Layout {
-	l.AddWidget(controller.getView(), stretch, alignement)
-
-	return l
-}
-
-func InitMainWidgets() *Widget {
-	layout := &Layout{widgets.NewQVBoxLayout()}
-	widget := &Widget{widgets.NewQWidget(nil, 0)}
-	widget.SetStyleSheet("background-color: #222b45;")
-
-	model := &InputModel{}
-	input := NewInputView()
-	inputController := NewInputController(model, input)
-	layout.AddController(inputController, 0, core.Qt__AlignTop)
-
+	layout := widgets.NewQVBoxLayout()
+	widget := widgets.NewQWidget(nil, 0)
 	widget.SetLayout(layout)
+	appController = &AppController{widget, layout, make([]WidgetController, 0, 5)}
 
-	inputController.render()
+	return appController
+}
 
-	model.SetText("tetesd")
+func GetAppController() *AppController {
+	return appController
+}
 
-	inputController.render()
+func (ac *AppController) AddController(controller WidgetController) *AppController {
+	ac.controllers = append(ac.controllers, controller)
+	ac.widget.Layout().AddWidget(controller.getView())
 
-	return widget
+	return ac
+}
+
+func (ac *AppController) AddController2(controller WidgetController, stretch int, alignement core.Qt__AlignmentFlag) *AppController {
+	ac.controllers = append(ac.controllers, controller)
+	ac.layout.AddWidget(controller.getView(), stretch, alignement)
+
+	return ac
+}
+
+func (ac *AppController) Render() *AppController {
+	for _, controller := range ac.controllers {
+		if !controller.getModel().isDueForAnUpdate() {
+			continue
+		}
+
+		controller.render()
+	}
+
+	return ac
+}
+
+func (ac *AppController) getCentralWidget() widgets.QWidget_ITF {
+	return ac.widget
 }

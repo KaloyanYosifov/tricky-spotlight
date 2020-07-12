@@ -11,6 +11,7 @@ type KeyEventHandler struct {
 const (
 	// Trivial
 	KEY_SPACE       GlobalKey = 57
+	KEY_ENTER                 = 28
 	KEY_CTRL                  = 56
 	KEY_META                  = 29
 	KEY_ALT                   = 125

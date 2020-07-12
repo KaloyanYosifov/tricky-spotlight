@@ -71,6 +71,20 @@ func (im *listModel) RemoveLastItem() {
 	im.abstractListModel.EndRemoveRows()
 }
 
+func (im *listModel) GetItem(index int) *ListData {
+	if len(im.modelData) == 0 {
+		return nil
+	}
+
+	return &im.modelData[index]
+}
+
+func (im *listModel) Clear() {
+	im.abstractListModel.BeginInsertRows(core.NewQModelIndex(), 0, 1)
+	im.modelData = make([]ListData, 0)
+	im.abstractListModel.EndInsertRows()
+}
+
 func (im *listModel) GetData() []ListData {
 	if len(im.modelData) <= 0 {
 		return im.modelData

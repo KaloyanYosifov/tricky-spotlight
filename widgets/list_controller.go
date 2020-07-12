@@ -4,24 +4,24 @@ import (
 	"github.com/therecipe/qt/widgets"
 )
 
-type listController struct {
+type ListController struct {
 	model *listModel
 	list  *listView
 }
 
-func NewListController(model *listModel, list *listView) *listController {
+func NewListController(model *listModel, list *listView) *ListController {
 	list.SetModel(model.abstractListModel)
 
-	listController := &listController{model, list}
+	listController := &ListController{model, list}
 
 	return listController
 }
 
-func NewListController2(modelId string) *listController {
+func NewListController2(modelId string) *ListController {
 	return NewListController(NewListModel(modelId), NewListView())
 }
 
-func (lc *listController) render() {
+func (lc *ListController) render() {
 	if !lc.model.isDueForAnUpdate() {
 		return
 	}
@@ -29,18 +29,26 @@ func (lc *listController) render() {
 	lc.model.Updated()
 }
 
-func (lc *listController) getModel() WidgetModel {
+func (lc *ListController) getModel() WidgetModel {
 	return lc.model
 }
 
-func (lc *listController) getView() widgets.QWidget_ITF {
+func (lc *ListController) getView() widgets.QWidget_ITF {
 	return lc.list
 }
 
-func (lc *listController) Show() {
+func (lc *ListController) Show() {
 	lc.list.Show()
 }
 
-func (lc *listController) Hide() {
+func (lc *ListController) Hide() {
 	lc.list.Hide()
+}
+
+func (lc *ListController) GetList() *listView {
+	return lc.list
+}
+
+func (lc *ListController) GetModel() *listModel {
+	return lc.model
 }

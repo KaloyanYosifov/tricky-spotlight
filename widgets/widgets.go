@@ -78,3 +78,13 @@ func (ac *AppController) Render() *AppController {
 func (ac *AppController) GetCentralWidget() widgets.QWidget_ITF {
 	return ac.widget
 }
+
+func (ac *AppController) GetController(id string) WidgetController {
+	controller, ok := ac.controllers.Load(id)
+
+	if !ok {
+		panic("app controller: no controller is found with such id - " + id)
+	}
+
+	return controller.(WidgetController)
+}

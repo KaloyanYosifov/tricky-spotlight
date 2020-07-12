@@ -1,7 +1,9 @@
 package main
 
 import (
+	"github.com/KaloyanYosifov/tricky-spotlight/database"
 	"github.com/KaloyanYosifov/tricky-spotlight/keylogger"
+	"github.com/KaloyanYosifov/tricky-spotlight/models"
 	localWidgets "github.com/KaloyanYosifov/tricky-spotlight/widgets"
 	"github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/widgets"
@@ -47,28 +49,55 @@ func initWidgets(window Window) {
 
 	listModel := localWidgets.NewListModel("list-1")
 	listController := localWidgets.NewListController(listModel, localWidgets.NewListView())
-	listController.Hide()
 
 	localWidgets.
 		GetAppController().
 		AddController2("list-controller-1", listController, 0, core.Qt__AlignBottom)
 
 	inputController.GetInput().ConnectTextChanged(func(text string) {
-		if len(text) > 2 {
-			listController.Show()
-		} else {
-			listController.Hide()
+		entries := models.SearchForDesktopEntry(text, database.GetDatabase().GetUnderilyingDB())
+		listModel.Clear()
+
+		for _, entry := range entries {
+			listModel.Add(localWidgets.ListData{Icon: entry.Icon, Name: entry.Name, Executable: entry.ExecutablePath})
 		}
 	})
 }
 
 func (window *Window) initKeyEventHandling() {
 	keyEventHandler := keylogger.NewKeyEventHandler(func(eventHandler *keylogger.KeyEventHandler) {
+		if window.IsVisible() && eventHandler.IsKeyActive(keylogger.KEY_ENTER) {
+			listController := localWidgets.GetAppController().GetController("list-controller-1").(*localWidgets.ListController)
+			inputController := localWidgets.GetAppController().GetController("input-controller-1").(*localWidgets.InputController)
+			selectedIndexes := listController.GetList().SelectedIndexes()
+			var data *localWidgets.ListData
+
+			if len(selectedIndexes) > 0 {
+				data = listController.GetModel().GetItem(selectedIndexes[0].Row())
+			} else {
+				data = listController.GetModel().GetItem(0)
+			}
+
+			if data != nil {
+				entry := models.DesktopEntry{
+					ExecutablePath: data.Executable,
+				}
+
+				entry.Execute()
+				listController.GetModel().Clear()
+				inputController.GetInputModel().SetText("").Update()
+				window.Hide()
+			}
+		}
+
 		if eventHandler.IsKeyCombinationActive([]keylogger.GlobalKey{keylogger.KEY_SPACE, keylogger.KEY_CTRL}) {
 			if window.IsVisible() {
 				window.Hide()
 			} else {
 				window.Show()
+				window.ActivateWindow()
+				inputController := localWidgets.GetAppController().GetController("input-controller-1").(*localWidgets.InputController)
+				inputController.GetInput().SetFocus2()
 			}
 		}
 	}, func(eventHandler *keylogger.KeyEventHandler) {

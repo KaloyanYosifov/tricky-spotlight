@@ -1,4 +1,4 @@
-package main
+package database
 
 import (
 	"github.com/KaloyanYosifov/tricky-spotlight/models"
@@ -8,7 +8,17 @@ import (
 	"os"
 )
 
-func initDatabase(path string) *gorm.DB {
+type Database struct {
+	*gorm.DB
+}
+
+var globalDB *Database
+
+func InitDatabase(path string) *Database {
+	if globalDB != nil {
+		return globalDB
+	}
+
 	// test if we path exists
 	// if not create directories
 	if _, err := os.Stat(path); os.IsNotExist(err) {
@@ -33,9 +43,31 @@ func initDatabase(path string) *gorm.DB {
 		panic("failed to connect database")
 	}
 
-	return db
+	globalDB = &Database{db}
+
+	return globalDB
 }
 
-func migrateModels(db *gorm.DB) {
+func GetDatabase() *Database {
+	return globalDB
+}
+
+func (db *Database) MigrateModels() {
 	db.AutoMigrate(&models.DesktopEntry{})
+}
+
+func (db *Database) GetUnderilyingDB() *gorm.DB {
+	return db.DB
+}
+
+func (db *Database) Close() error {
+	err := db.DB.Close()
+
+	if err != nil {
+		return err
+	}
+
+	globalDB = nil
+
+	return nil
 }

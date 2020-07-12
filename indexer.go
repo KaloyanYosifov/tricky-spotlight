@@ -1,15 +1,15 @@
 package main
 
 import (
+	"github.com/KaloyanYosifov/tricky-spotlight/database"
 	"github.com/KaloyanYosifov/tricky-spotlight/logger"
 	"github.com/KaloyanYosifov/tricky-spotlight/models"
-	"github.com/jinzhu/gorm"
 	"io/ioutil"
 	"regexp"
 	"strings"
 )
 
-func indexDesktopEntries(db *gorm.DB) {
+func indexDesktopEntries(db *database.Database) {
 	linuxDesktopEntriesPath := "/usr/share/applications"
 	files, err := ioutil.ReadDir(linuxDesktopEntriesPath)
 

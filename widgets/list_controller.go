@@ -1,6 +1,8 @@
 package widgets
 
-import "github.com/therecipe/qt/widgets"
+import (
+	"github.com/therecipe/qt/widgets"
+)
 
 type listController struct {
 	model *listModel
@@ -8,6 +10,8 @@ type listController struct {
 }
 
 func NewListController(model *listModel, list *listView) *listController {
+	list.SetModel(model.abstractListModel)
+
 	listController := &listController{model, list}
 
 	return listController
@@ -22,7 +26,6 @@ func (lc *listController) render() {
 		return
 	}
 
-	lc.list.SetText(lc.model.text)
 	lc.model.Updated()
 }
 

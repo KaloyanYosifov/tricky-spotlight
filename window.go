@@ -43,6 +43,13 @@ func initWidgets() {
 	localWidgets.
 		GetAppController().
 		AddController(localWidgets.NewInputController2("input-1"))
+
+	listModel := localWidgets.NewListModel("list-1")
+	listModel.Add(localWidgets.ListData{Icon: "test", Name: "test", Executable: "asd"})
+
+	localWidgets.
+		GetAppController().
+		AddController(localWidgets.NewListController(listModel, localWidgets.NewListView()))
 }
 
 func (window *Window) initKeyEventHandling() {

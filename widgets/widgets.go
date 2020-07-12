@@ -50,6 +50,10 @@ func (ac *AppController) AddController2(controller WidgetController, stretch int
 
 func (ac *AppController) Render() *AppController {
 	for _, controller := range ac.controllers {
+		if controller == nil {
+			continue
+		}
+
 		controller.render()
 	}
 

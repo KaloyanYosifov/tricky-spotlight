@@ -11,7 +11,7 @@ type inputModelManager struct {
 
 var modelManager *inputModelManager
 
-func GetModelManager() *inputModelManager {
+func GetInputModelManager() *inputModelManager {
 	if modelManager == nil {
 		modelManager = &inputModelManager{make(map[string]*inputModel, 0)}
 	}
@@ -24,7 +24,7 @@ func NewInputModel(modelId string) *inputModel {
 		&BaseModel{},
 		"",
 	}
-	GetModelManager().addModel(modelId, inputModel)
+	GetInputModelManager().addModel(modelId, inputModel)
 
 	return inputModel
 }

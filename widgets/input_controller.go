@@ -9,6 +9,9 @@ type inputController struct {
 
 func NewInputController(model *inputModel, input *inputView) *inputController {
 	inputController := &inputController{model, input}
+	input.ConnectTextChanged(func(text string) {
+		model.SetText(text)
+	})
 
 	return inputController
 }
@@ -32,4 +35,20 @@ func (ic *inputController) getModel() WidgetModel {
 
 func (ic *inputController) getView() widgets.QWidget_ITF {
 	return ic.input
+}
+
+func (ic *inputController) Show() {
+	ic.input.Show()
+}
+
+func (ic *inputController) Hide() {
+	ic.input.Hide()
+}
+
+func (ic *inputController) GetInput() *inputView {
+	return ic.input
+}
+
+func (ic *inputController) GetInputModel() *inputModel {
+	return ic.model
 }

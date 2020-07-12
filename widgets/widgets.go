@@ -3,12 +3,13 @@ package widgets
 import (
 	"github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/widgets"
+	"sync"
 )
 
 type AppController struct {
 	widget      *widgets.QWidget
 	layout      *widgets.QVBoxLayout
-	controllers []WidgetController
+	controllers *sync.Map
 }
 
 var appController *AppController
@@ -21,7 +22,7 @@ func InitAppController() *AppController {
 	layout := widgets.NewQVBoxLayout()
 	widget := widgets.NewQWidget(nil, 0)
 	widget.SetLayout(layout)
-	appController = &AppController{widget, layout, make([]WidgetController, 0, 5)}
+	appController = &AppController{widget, layout, &sync.Map{}}
 
 	return appController
 }
@@ -34,28 +35,42 @@ func GetAppController() *AppController {
 	return appController
 }
 
-func (ac *AppController) AddController(controller WidgetController) *AppController {
-	ac.controllers = append(ac.controllers, controller)
+func (ac *AppController) AddController(id string, controller WidgetController) *AppController {
+	_, ok := ac.controllers.Load(id)
+
+	if ok {
+		panic("There is already a controller with such id")
+	}
+
+	ac.controllers.Store(id, controller)
 	ac.widget.Layout().AddWidget(controller.getView())
 
 	return ac
 }
 
-func (ac *AppController) AddController2(controller WidgetController, stretch int, alignement core.Qt__AlignmentFlag) *AppController {
-	ac.controllers = append(ac.controllers, controller)
+func (ac *AppController) AddController2(id string, controller WidgetController, stretch int, alignement core.Qt__AlignmentFlag) *AppController {
+	_, ok := ac.controllers.Load(id)
+
+	if ok {
+		panic("There is already a controller with such id")
+	}
+
+	ac.controllers.Store(id, controller)
 	ac.layout.AddWidget(controller.getView(), stretch, alignement)
 
 	return ac
 }
 
 func (ac *AppController) Render() *AppController {
-	for _, controller := range ac.controllers {
+	ac.controllers.Range(func(_ interface{}, controller interface{}) bool {
 		if controller == nil {
-			continue
+			return false
 		}
 
-		controller.render()
-	}
+		controller.(WidgetController).render()
+
+		return true
+	})
 
 	return ac
 }

@@ -12,6 +12,8 @@ type WidgetController interface {
 	render()
 	getModel() WidgetModel
 	getView() widgets.QWidget_ITF
+	Show()
+	Hide()
 }
 
 type BaseModel struct {

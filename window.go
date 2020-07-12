@@ -34,22 +34,32 @@ func initMainWindow(app *widgets.QApplication) *Window {
 		}
 	}(localWidgets.GetAppController())
 
-	initWidgets()
+	initWidgets(window)
 
 	return &window
 }
 
-func initWidgets() {
+func initWidgets(window Window) {
+	inputController := localWidgets.NewInputController2("input-1")
 	localWidgets.
 		GetAppController().
-		AddController(localWidgets.NewInputController2("input-1"))
+		AddController2("input-controller-1", inputController, 0, core.Qt__AlignTop)
 
 	listModel := localWidgets.NewListModel("list-1")
-	listModel.Add(localWidgets.ListData{Icon: "test", Name: "test", Executable: "asd"})
+	listController := localWidgets.NewListController(listModel, localWidgets.NewListView())
+	listController.Hide()
 
 	localWidgets.
 		GetAppController().
-		AddController(localWidgets.NewListController(listModel, localWidgets.NewListView()))
+		AddController2("list-controller-1", listController, 0, core.Qt__AlignBottom)
+
+	inputController.GetInput().ConnectTextChanged(func(text string) {
+		if len(text) > 2 {
+			listController.Show()
+		} else {
+			listController.Hide()
+		}
+	})
 }
 
 func (window *Window) initKeyEventHandling() {

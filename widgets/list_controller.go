@@ -36,3 +36,11 @@ func (lc *listController) getModel() WidgetModel {
 func (lc *listController) getView() widgets.QWidget_ITF {
 	return lc.list
 }
+
+func (lc *listController) Show() {
+	lc.list.Show()
+}
+
+func (lc *listController) Hide() {
+	lc.list.Hide()
+}

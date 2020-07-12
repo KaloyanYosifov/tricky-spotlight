@@ -8,6 +8,7 @@ type listView struct {
 
 func NewListView() *listView {
 	input := &listView{widgets.NewQListView(nil)}
+	input.SetStyleSheet("color: #fff;")
 
 	return input
 }

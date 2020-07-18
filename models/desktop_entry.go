@@ -14,11 +14,12 @@ type DesktopEntry struct {
 	Icon           string
 	EntryPath      string `gorm:"index"`
 	ExecutablePath string
+	TimesTriggered int `gorm:"index"`
 }
 
 func SearchForDesktopEntry(name string, db *gorm.DB) []DesktopEntry {
 	var desktopEntries []DesktopEntry
-	db.Where("name like ?", "%"+name+"%").Find(&desktopEntries)
+	db.Where("name like ?", "%"+name+"%").Order("times_triggered desc").Find(&desktopEntries)
 
 	return desktopEntries
 }

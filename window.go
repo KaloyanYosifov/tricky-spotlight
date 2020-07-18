@@ -36,12 +36,12 @@ func initMainWindow(app *widgets.QApplication) *Window {
 		}
 	}(localWidgets.GetAppController())
 
-	initWidgets(window)
+	initWidgets()
 
 	return &window
 }
 
-func initWidgets(window Window) {
+func initWidgets() {
 	inputController := localWidgets.NewInputController2("input-1")
 	localWidgets.
 		GetAppController().
@@ -79,13 +79,17 @@ func (window *Window) initKeyEventHandling() {
 			}
 
 			if data != nil {
-				entry := models.DesktopEntry{
-					ExecutablePath: data.Executable,
-				}
+				var entry models.DesktopEntry
+				db := database.GetDatabase()
+				db.First(&entry, "executable_path = ?", data.Executable)
 
 				entry.Execute()
 				listController.GetModel().Clear()
 				inputController.GetInputModel().SetText("").Update()
+
+				entry.TimesTriggered += 1
+				db.Save(&entry)
+
 				window.Hide()
 			}
 		}

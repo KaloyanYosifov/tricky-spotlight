@@ -1,7 +1,7 @@
 package keylogger
 
 import (
-	"github.com/MarinX/keylogger"
+	"github.com/KaloyanYosifov/keylogger"
 )
 
 func WaitForKeyEvents(eventHandler *KeyEventHandler) {

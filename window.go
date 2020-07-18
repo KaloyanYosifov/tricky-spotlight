@@ -94,7 +94,7 @@ func (window *Window) initKeyEventHandling() {
 			}
 		}
 
-		if eventHandler.IsKeyCombinationActive([]keylogger.GlobalKey{keylogger.KEY_SPACE, keylogger.KEY_CTRL}) {
+		if eventHandler.IsOnlyKeyCombinationActive([]keylogger.GlobalKey{keylogger.KEY_SPACE, keylogger.KEY_CTRL}) {
 			if window.IsVisible() {
 				window.Hide()
 			} else {

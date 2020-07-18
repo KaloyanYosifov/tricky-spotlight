@@ -78,3 +78,14 @@ func TestItCanReturnTrueIfKeyCombinationExistsAndTheOrderDoesntMatter(t *testing
 		t.Fatal("The key combination is not active!")
 	}
 }
+
+func TestReturnsFalseIfTheKeyCombinationIsNotExact(t *testing.T) {
+	keyEventHandler := NewKeyEventHandler(nil, nil)
+	keyEventHandler.keyPressed(KEY_LEFT_SHIFT)
+	keyEventHandler.keyPressed(KEY_a)
+	keyEventHandler.keyPressed(KEY_b)
+
+	if keyEventHandler.IsOnlyKeyCombinationActive([]GlobalKey{KEY_a, KEY_LEFT_SHIFT}) {
+		t.Fatal("The key combination should be exact, but returned true!")
+	}
+}

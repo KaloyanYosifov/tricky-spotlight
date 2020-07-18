@@ -66,7 +66,11 @@ func initWidgets() {
 
 func (window *Window) initKeyEventHandling() {
 	keyEventHandler := keylogger.NewKeyEventHandler(func(eventHandler *keylogger.KeyEventHandler) {
-		if window.IsVisible() && eventHandler.IsKeyActive(keylogger.KEY_ENTER) {
+		if window.IsVisible() && eventHandler.IsOnlyKeyActive(keylogger.KEY_ESC) {
+			window.Hide()
+		}
+
+		if window.IsVisible() && eventHandler.IsOnlyKeyActive(keylogger.KEY_ENTER) {
 			listController := localWidgets.GetAppController().GetController("list-controller-1").(*localWidgets.ListController)
 			inputController := localWidgets.GetAppController().GetController("input-controller-1").(*localWidgets.InputController)
 			selectedIndexes := listController.GetList().SelectedIndexes()

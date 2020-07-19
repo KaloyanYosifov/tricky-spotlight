@@ -26,7 +26,7 @@ func SearchForDesktopEntry(name string, db *gorm.DB) []DesktopEntry {
 
 func (de *DesktopEntry) Execute() {
 	userToRunCommandAs := findOutAsWhoToExecuteEntryAs()
-	cmd := exec.Command("runuser", "-l", userToRunCommandAs, "-c", "export DISPLAY=:0 && "+de.ExecutablePath+" &")
+	cmd := exec.Command("runuser", "-l", userToRunCommandAs, "-c", "export DISPLAY=:0 && "+de.ExecutablePath+" </dev/null &>/dev/null &")
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	err := cmd.Run()
